@@ -1,0 +1,21 @@
+.dashboard-container{
+    padding: 20px;
+}
+.headerDiv{
+
+
+}
+.logo-container{
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
+.dashboard-title{
+    font-family: Inter, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 16.94px;
+    letter-spacing: 0.1em;
+    text-align: left;
+    color: #6E6893;
+}
