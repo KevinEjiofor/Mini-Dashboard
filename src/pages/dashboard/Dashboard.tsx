@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { fetchUsers, User } from '../../apiService/apiServices';
 import logo from '../../assets/ibcs.png';
-import './Dashboard.styles'; // if you still need to import other styles
+import './Dashboard.styles';
 import SearchInput from '../../components/searchInput/SearchInput';
 import UserRow from '../../components/userRows/UserRows';
 import { FiArrowUp, FiArrowDown } from 'react-icons/fi';
 import LoadingScreen from '../../components/loadingScreen/LoadingScreen';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Snackbar, Fab } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import UserForm from '../../components/UserForms/userForm';
 import {
     DashboardContainer,
     HeaderDiv,
@@ -15,7 +18,7 @@ import {
     PaginationContainer,
     PaginationButton,
     PaginationInfo,
-    SpaceBelowSearch, // Import the new spacing component
+    SpaceBelowSearch,
 } from './Dashboard.styles';
 
 const Dashboard: React.FC = () => {
@@ -28,6 +31,11 @@ const Dashboard: React.FC = () => {
     const itemsPerPage = 5;
     const [editingUserId, setEditingUserId] = useState<number | null>(null);
     const [editedUser, setEditedUser] = useState<Partial<User>>({});
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [userToDelete, setUserToDelete] = useState<User | null>(null);
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+
+    const [openUserForm, setOpenUserForm] = useState(false);
 
     useEffect(() => {
         fetchUsers()
@@ -97,18 +105,36 @@ const Dashboard: React.FC = () => {
         setEditedUser({});
     };
 
-    const handleDeleteClick = (id: number) => {
-        if (window.confirm('Are you sure you want to delete this user?')) {
-            setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
+    const handleDeleteRequest = (user: User) => {
+        setUserToDelete(user);
+        setDeleteDialogOpen(true);
+    };
+
+    const handleDeleteConfirmed = () => {
+        if (userToDelete) {
+            setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userToDelete.id));
+            setSnackbarOpen(true);
         }
+        setDeleteDialogOpen(false);
+        setUserToDelete(null);
+    };
+
+    const handleDeleteCancel = () => {
+        setDeleteDialogOpen(false);
+        setUserToDelete(null);
     };
 
     const handleEditChange = (field: keyof User, value: string) => {
         setEditedUser((prev) => ({ ...prev, [field]: value }));
     };
 
+    // Callback when a new user is created in the form
+    const handleUserCreated = (newUser: User) => {
+        setUsers((prevUsers) => [newUser, ...prevUsers]);
+    };
+
     if (loading) return <LoadingScreen />;
-    if (error) return <div>Error: {error}</div>;
+    if (error) return <DashboardContainer>Error: {error}</DashboardContainer>;
 
     return (
         <DashboardContainer>
@@ -127,7 +153,6 @@ const Dashboard: React.FC = () => {
                 }}
             />
 
-            {/* Use the styled spacing component */}
             <SpaceBelowSearch />
 
             <TableContainer>
@@ -153,7 +178,7 @@ const Dashboard: React.FC = () => {
                             onEdit={handleEditClick}
                             onSave={handleSaveClick}
                             onCancel={() => setEditingUserId(null)}
-                            onDelete={handleDeleteClick}
+                            onDelete={handleDeleteRequest}
                             onEditChange={handleEditChange}
                         />
                     ))}
@@ -180,6 +205,46 @@ const Dashboard: React.FC = () => {
                     Next
                 </PaginationButton>
             </PaginationContainer>
+
+            {/* Delete Confirmation Dialog */}
+            <Dialog open={deleteDialogOpen} onClose={handleDeleteCancel}>
+                <DialogTitle>Confirm Delete</DialogTitle>
+                <DialogContent>
+                    Are you sure you want to delete {userToDelete?.name}?
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleDeleteCancel} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleDeleteConfirmed} color="error">
+                        Delete
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            {/* Snackbar for deletion notification */}
+            <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={3000}
+                onClose={() => setSnackbarOpen(false)}
+                message="User has been deleted"
+            />
+
+
+            <Fab
+                color="primary"
+                aria-label="add"
+                onClick={() => setOpenUserForm(true)}
+                style={{ position: 'fixed', bottom: 20, right: 20 }}
+            >
+                <AddIcon />
+            </Fab>
+
+            <UserForm
+                open={openUserForm}
+                onClose={() => setOpenUserForm(false)}
+                onUserCreated={handleUserCreated}
+            />
         </DashboardContainer>
     );
 };

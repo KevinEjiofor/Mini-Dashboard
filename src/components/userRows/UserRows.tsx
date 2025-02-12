@@ -15,7 +15,7 @@ interface UserRowProps {
     onEdit: (user: User) => void;
     onSave: (id: number) => void;
     onCancel: () => void;
-    onDelete: (id: number) => void;
+    onDelete: (user: User) => void; // now passing the full user object
     onEditChange: (field: keyof User, value: string) => void;
 }
 
@@ -38,6 +38,7 @@ const UserRow: React.FC<UserRowProps> = ({
                         onChange={(e) => onEditChange('name', e.target.value)}
                         variant="outlined"
                         size="small"
+                        sx={{ '& .MuiOutlinedInput-root': { borderRadius: '12px' } }} // Custom rounded input
                     />
                 ) : (
                     user.name
@@ -51,6 +52,7 @@ const UserRow: React.FC<UserRowProps> = ({
                         onChange={(e) => onEditChange('email', e.target.value)}
                         variant="outlined"
                         size="small"
+                        sx={{ '& .MuiOutlinedInput-root': { borderRadius: '12px' } }} // Custom rounded input
                     />
                 ) : (
                     user.email
@@ -78,7 +80,7 @@ const UserRow: React.FC<UserRowProps> = ({
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="Delete">
-                            <IconButton onClick={() => onDelete(user.id)} color="error" size="small">
+                            <IconButton onClick={() => onDelete(user)} color="error" size="small">
                                 <DeleteIcon />
                             </IconButton>
                         </Tooltip>
