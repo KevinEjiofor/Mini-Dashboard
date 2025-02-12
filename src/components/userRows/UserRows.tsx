@@ -1,5 +1,12 @@
+// UserRow.tsx
 import React from 'react';
+import { IconButton, Tooltip, TextField } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Cancel';
 import { User } from '../../apiService/apiServices';
+import { StyledTableRow, StyledTableCell, ActionsCell } from './UserRow.styles';
 
 interface UserRowProps {
     user: User;
@@ -23,53 +30,62 @@ const UserRow: React.FC<UserRowProps> = ({
                                              onEditChange,
                                          }) => {
     return (
-        <tr className="table-row">
-            <td className="table-cell">
+        <StyledTableRow>
+            <StyledTableCell>
                 {isEditing ? (
-                    <input
-                        type="text"
+                    <TextField
                         value={editedUser.name || ''}
                         onChange={(e) => onEditChange('name', e.target.value)}
-                        className="search-input"
+                        variant="outlined"
+                        size="small"
                     />
                 ) : (
                     user.name
                 )}
-            </td>
-            <td className="table-cell">
+            </StyledTableCell>
+            <StyledTableCell>
                 {isEditing ? (
-                    <input
+                    <TextField
                         type="email"
                         value={editedUser.email || ''}
                         onChange={(e) => onEditChange('email', e.target.value)}
-                        className="search-input"
+                        variant="outlined"
+                        size="small"
                     />
                 ) : (
                     user.email
                 )}
-            </td>
-            <td className="table-cell">
+            </StyledTableCell>
+            <ActionsCell>
                 {isEditing ? (
-                    <div className="flex space-x-2">
-                        <button onClick={() => onSave(user.id)} className="button button-save">
-                            Save
-                        </button>
-                        <button onClick={onCancel} className="button button-cancel">
-                            Cancel
-                        </button>
-                    </div>
+                    <>
+                        <Tooltip title="Save">
+                            <IconButton onClick={() => onSave(user.id)} color="primary" size="small">
+                                <SaveIcon />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Cancel">
+                            <IconButton onClick={onCancel} color="secondary" size="small">
+                                <CancelIcon />
+                            </IconButton>
+                        </Tooltip>
+                    </>
                 ) : (
-                    <div className="flex space-x-2">
-                        <button onClick={() => onEdit(user)} className="button button-edit">
-                            Edit
-                        </button>
-                        <button onClick={() => onDelete(user.id)} className="button button-delete">
-                            Delete
-                        </button>
-                    </div>
+                    <>
+                        <Tooltip title="Edit">
+                            <IconButton onClick={() => onEdit(user)} color="primary" size="small">
+                                <EditIcon />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Delete">
+                            <IconButton onClick={() => onDelete(user.id)} color="error" size="small">
+                                <DeleteIcon />
+                            </IconButton>
+                        </Tooltip>
+                    </>
                 )}
-            </td>
-        </tr>
+            </ActionsCell>
+        </StyledTableRow>
     );
 };
 

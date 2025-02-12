@@ -1,9 +1,22 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { fetchUsers, User } from '../../apiService/apiServices';
 import logo from '../../assets/ibcs.png';
-import './Dashboard.css';
+import './Dashboard.styles'; // if you still need to import other styles
 import SearchInput from '../../components/searchInput/SearchInput';
 import UserRow from '../../components/userRows/UserRows';
+import { FiArrowUp, FiArrowDown } from 'react-icons/fi';
+import LoadingScreen from '../../components/loadingScreen/LoadingScreen';
+import {
+    DashboardContainer,
+    HeaderDiv,
+    LogoContainer,
+    DashboardTitle,
+    TableContainer,
+    PaginationContainer,
+    PaginationButton,
+    PaginationInfo,
+    SpaceBelowSearch, // Import the new spacing component
+} from './Dashboard.styles';
 
 const Dashboard: React.FC = () => {
     const [users, setUsers] = useState<User[]>([]);
@@ -94,21 +107,18 @@ const Dashboard: React.FC = () => {
         setEditedUser((prev) => ({ ...prev, [field]: value }));
     };
 
-    if (loading) return <div className="p-4 text-center">Loading...</div>;
-    if (error) return <div className="p-4 text-center text-red-600">Error: {error}</div>;
+    if (loading) return <LoadingScreen />;
+    if (error) return <div>Error: {error}</div>;
 
     return (
-        <div className="dashboard-container">
-            {/* Header with logo and title */}
-            <div className="headerDiv">
-                <div className="logo-container">
-                    <img src={logo} alt="Logo" className="logo" />
-                </div>
-                <h1 className="dashboard-title">User Dashboard</h1>
-                <div className="placeholder"></div>
-            </div>
+        <DashboardContainer>
+            <HeaderDiv>
+                <LogoContainer>
+                    <img src={logo} alt="Logo" style={{ maxWidth: '100%', height: 'auto' }} />
+                </LogoContainer>
+                <DashboardTitle variant="h1">User Dashboard</DashboardTitle>
+            </HeaderDiv>
 
-            {/* Search Input Component */}
             <SearchInput
                 searchTerm={searchTerm}
                 onSearchChange={(value) => {
@@ -117,18 +127,20 @@ const Dashboard: React.FC = () => {
                 }}
             />
 
-            {/* Responsive Table Container */}
-            <div className="table-container">
-                <table className="dashboard-table">
+            {/* Use the styled spacing component */}
+            <SpaceBelowSearch />
+
+            <TableContainer>
+                <table>
                     <thead>
                     <tr>
-                        <th className="table-header" onClick={() => requestSort('name')}>
-                            Name {sortConfig?.key === 'name' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}
+                        <th onClick={() => requestSort('name')}>
+                            Name {sortConfig?.key === 'name' && (sortConfig.direction === 'ascending' ? <FiArrowUp /> : <FiArrowDown />)}
                         </th>
-                        <th className="table-header" onClick={() => requestSort('email')}>
-                            Email {sortConfig?.key === 'email' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}
+                        <th onClick={() => requestSort('email')}>
+                            Email {sortConfig?.key === 'email' && (sortConfig.direction === 'ascending' ? <FiArrowUp /> : <FiArrowDown />)}
                         </th>
-                        <th className="table-header">Actions</th>
+                        <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -147,29 +159,28 @@ const Dashboard: React.FC = () => {
                     ))}
                     </tbody>
                 </table>
-            </div>
+            </TableContainer>
 
-            {/* Pagination Controls */}
-            <div className="pagination-container">
-                <button
+            <PaginationContainer>
+                <PaginationButton
+                    variant="contained"
                     onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                     disabled={currentPage === 1}
-                    className="pagination-button"
                 >
                     Previous
-                </button>
-                <span className="pagination-info">
-          Page {currentPage} of {totalPages}
-        </span>
-                <button
+                </PaginationButton>
+                <PaginationInfo>
+                    Page {currentPage} of {totalPages}
+                </PaginationInfo>
+                <PaginationButton
+                    variant="contained"
                     onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                     disabled={currentPage === totalPages}
-                    className="pagination-button"
                 >
                     Next
-                </button>
-            </div>
-        </div>
+                </PaginationButton>
+            </PaginationContainer>
+        </DashboardContainer>
     );
 };
 

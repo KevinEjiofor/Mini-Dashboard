@@ -1,24 +1,30 @@
 import React from 'react';
-import { FiSearch } from 'react-icons/fi';
-import './SearchInputStyle.css';
+import InputAdornment from '@mui/material/InputAdornment';
+import SearchIcon from '@mui/icons-material/Search';
+import CustomSearchTextField from './MaterialSearchInputStyles';
 
-interface SearchInputProps {
+interface MaterialSearchInputProps {
     searchTerm: string;
     onSearchChange: (value: string) => void;
 }
 
-const SearchInput: React.FC<SearchInputProps> = ({ searchTerm, onSearchChange }) => {
+const MaterialSearchInput: React.FC<MaterialSearchInputProps> = ({ searchTerm, onSearchChange }) => {
     return (
-        <div className="search-input-container">
-            <FiSearch className="search-icon" />
-            <input
-                type="text"
-                placeholder="Search by name or email"
-                value={searchTerm}
-                onChange={(e) => onSearchChange(e.target.value)}
-            />
-        </div>
+        <CustomSearchTextField
+            value={searchTerm}
+            onChange={(e) => onSearchChange(e.target.value)}
+            placeholder="Search by name or email"
+            variant="outlined"
+            size="small"
+            InputProps={{
+                startAdornment: (
+                    <InputAdornment position="start">
+                        <SearchIcon sx={{ color: '#6E6893', ml: 1 }} />
+                    </InputAdornment>
+                ),
+            }}
+        />
     );
 };
 
-export default SearchInput;
+export default MaterialSearchInput;
