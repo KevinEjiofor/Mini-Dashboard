@@ -1,47 +1,83 @@
-# Getting Started with Create React App
+# User Dashboard Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern React-based dashboard application that demonstrates how to build a user management interface with features like:
+- Fetching users from an API
+- Searching, sorting, and paginating users
+- Inline editing with Material UI components
+- Custom deletion confirmation using Material UI dialogs and snackbars
+- Creating a new user using a dialog-based form integrated with an API
 
-## Available Scripts
+## Table of Contents
 
-In the project directory, you can run:
+- [Overview](#overview)
+- [Features](#features)
+- [Technologies](#technologies)
+- [Installation](#installation)
+- [Usage](#usage)
+- [API Integration](#api-integration)
+- [Project Structure](#project-structure)
+- [License](#license)
 
-### `npm start`
+## Overview
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+This project is a user dashboard that allows you to:
+- **View** a list of users retrieved from an external API.
+- **Search** for users by name or email.
+- **Sort** users by name or email.
+- **Paginate** through the user list.
+- **Edit** user details inline with custom Material UI text fields (with rounded borders).
+- **Delete** users using a custom confirmation dialog and display a snackbar notification.
+- **Create** new users using a form dialog that integrates with an API (using `axios`).
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Features
 
-### `npm test`
+- **API Integration:**  
+  - Fetch users from [JSONPlaceholder](https://jsonplaceholder.typicode.com/users).
+  - Create users via a simulated API endpoint.
+- **User Management:**  
+  - List, search, sort, and paginate users.
+  - Inline editing and deletion with confirmation.
+- **Material UI Components:**  
+  - Uses Material UI for styling, dialogs, buttons, icons, and snackbars.
+- **Modular Code Structure:**  
+  - Components for the dashboard, user rows, search input, and user creation form are separated.
+  - Styled components (using Material UI's `styled` API) encapsulate all styling.
+- **User-Friendly UI:**  
+  - Floating Action Button (FAB) to open the "Create User" form.
+  - Custom confirmation dialog for deletion.
+  - Snackbar notifications to inform about deletion events.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Technologies
 
-### `npm run build`
+- **React** (with TypeScript)
+- **Material UI** (v5+)
+- **Axios** for API calls
+- **React Icons** for icons (e.g., edit, delete, add)
+- **JSONPlaceholder API** (for user data simulation)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Installation
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. **Clone the repository:**
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+   ```bash
+   git clone https://github.com/yourusername/your-repo-name.git
+   cd your-repo-name
 
-### `npm run eject`
+2. **Install dependencies:**
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+npm install
+# or
+yarn install
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+3. **Start the development server:**
+ npm start
+# or
+yarn start
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+4. **API Integration
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+This project uses axios to perform API calls. The two main functions are:**
 
-## Learn More
+The createUser endpoint is currently set to JSONPlaceholder. If you have your own backend server, update the URL to your API endpoint (e.g., /api/users), and ensure that your server is configured to handle POST requests.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-# Mini-Dashboard
